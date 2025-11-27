@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Order {{ order.order_number }} - EcoShop{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-r from-blue-600 to-indigo-700 py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold text-white">📋 Order {{ order.order_number }}</h1>
+    </div>
+</div>
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+            <h2 class="font-bold text-xl mb-4">Order Items</h2>
+            {% for item in order_items %}
+            <div class="flex justify-between items-center p-4 border-b">
+                <div>
+                    <p class="font-medium">{{ item.product_name }}</p>
+                    <p class="text-sm text-gray-500">Qty: {{ item.quantity }} × ${{ item.product_price }}</p>
+                </div>
+                <p class="font-bold">${{ item.subtotal }}</p>
+            </div>
+            {% endfor %}
+            <div class="mt-4 pt-4 border-t space-y-2">
+                <div class="flex justify-between"><span>Subtotal:</span><span>${{ order.subtotal }}</span></div>
+                <div class="flex justify-between"><span>Tax:</span><span>${{ order.tax }}</span></div>
+                <div class="flex justify-between"><span>Shipping:</span><span>${{ order.shipping_cost }}</span></div>
+                <div class="flex justify-between font-bold text-lg"><span>Total:</span><span>${{ order.total }}</span></div>
+            </div>
+        </div>
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="font-bold mb-4">Update Status</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_status">
+                    <select name="status" class="w-full p-2 border rounded-lg mb-4">
+                        {% for status_value, status_label in status_choices %}
+                        <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">Update Status</button>
+                </form>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="font-bold mb-4">Shipping Info</h3>
+                <p><strong>Name:</strong> {{ order.shipping_name }}</p>
+                <p><strong>Email:</strong> {{ order.shipping_email }}</p>
+                <p><strong>Phone:</strong> {{ order.shipping_phone }}</p>
+                <p><strong>Address:</strong> {{ order.shipping_address }}</p>
+                <p>{{ order.shipping_city }}, {{ order.shipping_country }} {{ order.shipping_postal_code }}</p>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'accounts:order_management_list' %}" class="inline-block mt-6 text-blue-600 hover:underline">← Back to Orders</a>
+</div>
+{% endblock %}

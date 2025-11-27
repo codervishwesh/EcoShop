@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}My Wishlist - EcoShop{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-8">
+    <h1 class="text-3xl font-bold mb-6">❤️ My Wishlist</h1>
+    
+    {% if wishlist_items %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in wishlist_items %}
+        <div class="bg-white rounded-xl border-2 border-gray-200 hover:border-green-500 hover:shadow-xl transition-all overflow-hidden">
+            <div class="relative bg-gradient-to-br from-green-50 to-emerald-50 p-6 h-48 flex items-center justify-center">
+                {% if item.product.image and item.product.image.name %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="max-h-full max-w-full object-contain">
+                {% else %}
+                <div class="text-5xl">📦</div>
+                {% endif %}
+                
+                <div class="absolute top-2 left-2 px-2 py-1 rounded-full font-bold text-xs bg-green-100 text-green-600">
+                    🌿 {{ item.product.eco_score }}
+                </div>
+                
+                <!-- Remove from Wishlist -->
+                <a href="{% url 'products:remove_from_wishlist' item.product.id %}" 
+                   class="absolute top-2 right-2 w-8 h-8 bg-red-100 text-red-500 rounded-full flex items-center justify-center hover:bg-red-200 transition">
+                    ✕
+                </a>
+            </div>
+            
+            <div class="p-4">
+                <div class="text-xs text-green-600 font-semibold mb-1">{{ item.product.category.name }}</div>
+                <h3 class="font-bold text-gray-900 mb-2">
+                    <a href="{% url 'products:product_detail' item.product.slug %}" class="hover:text-green-600">
+                        {{ item.product.name|truncatewords:5 }}
+                    </a>
+                </h3>
+                
+                <div class="flex justify-between items-center mb-3">
+                    <div class="text-xl font-bold text-green-600">${{ item.product.price }}</div>
+                    {% if item.product.stock > 0 %}
+                    <span class="text-sm text-green-600">✓ In Stock</span>
+                    {% else %}
+                    <span class="text-sm text-red-600">✕ Out of Stock</span>
+                    {% endif %}
+                </div>
+                
+                <div class="flex gap-2">
+                    {% if item.product.stock > 0 %}
+                    <form action="{% url 'orders:add_to_cart' item.product.id %}" method="post" class="flex-1">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                            🛒 Add to Cart
+                        </button>
+                    </form>
+                    {% else %}
+                    <button disabled class="flex-1 bg-gray-300 text-gray-500 py-2 rounded-lg font-semibold cursor-not-allowed">
+                        Out of Stock
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <!-- Empty Wishlist -->
+    <div class="bg-white rounded-xl shadow-md p-12 text-center">
+        <div class="text-8xl mb-4">❤️</div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Your Wishlist is Empty</h2>
+        <p class="text-gray-500 mb-6">Save items you love to your wishlist and find them easily later!</p>
+        <a href="{% url 'products:product_list' %}" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+            🛍️ Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+```
+
+---
+
+## 📁 Create this file at:
+```
+templates/products/wishlist.html

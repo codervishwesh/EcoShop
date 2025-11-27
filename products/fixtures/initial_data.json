@@ -1,0 +1,62 @@
+[
+    {
+        "model": "products.category",
+        "pk": 1,
+        "fields": {
+            "name": "Personal Care",
+            "slug": "personal-care",
+            "icon": "💆",
+            "description": "Eco-friendly personal care products"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 2,
+        "fields": {
+            "name": "Home & Living",
+            "slug": "home-living",
+            "icon": "🏠",
+            "description": "Sustainable home and living essentials"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 3,
+        "fields": {
+            "name": "Fashion",
+            "slug": "fashion",
+            "icon": "👗",
+            "description": "Sustainable fashion and clothing"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 4,
+        "fields": {
+            "name": "Kitchen",
+            "slug": "kitchen",
+            "icon": "🍳",
+            "description": "Eco-friendly kitchen essentials"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 5,
+        "fields": {
+            "name": "Electronics",
+            "slug": "electronics",
+            "icon": "📱",
+            "description": "Sustainable electronics and gadgets"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 6,
+        "fields": {
+            "name": "Garden",
+            "slug": "garden",
+            "icon": "🌱",
+            "description": "Organic gardening supplies"
+        }
+    }
+]

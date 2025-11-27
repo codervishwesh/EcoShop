@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Activity History - EcoShop{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-8">
+    <h1 class="text-3xl font-bold mb-6">Your Activity History</h1>
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-xl border-2 border-gray-200 text-center">
+            <div class="text-2xl font-bold text-green-600">{{ visits_today }}</div>
+            <div class="text-sm text-gray-600">Today</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border-2 border-gray-200 text-center">
+            <div class="text-2xl font-bold text-blue-600">{{ visits_this_week }}</div>
+            <div class="text-sm text-gray-600">This Week</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border-2 border-gray-200 text-center">
+            <div class="text-2xl font-bold text-purple-600">{{ visits_this_month }}</div>
+            <div class="text-sm text-gray-600">This Month</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border-2 border-gray-200 text-center">
+            <div class="text-2xl font-bold text-amber-600">{{ total_visits }}</div>
+            <div class="text-sm text-gray-600">All Time</div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl border-2 border-gray-200 p-6">
+        <h2 class="font-bold mb-4">Recent Activity</h2>
+        {% for activity in activities %}
+        <div class="py-2 border-b">{{ activity.page_visited }} - {{ activity.timestamp|date:"M d, Y H:i" }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

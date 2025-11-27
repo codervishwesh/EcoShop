@@ -1,0 +1,126 @@
+Content-Type: multipart/alternative;
+ boundary="===============5745349128017303888=="
+MIME-Version: 1.0
+Subject: =?utf-8?q?=F0=9F=8C=BF_Welcome_to_EcoShop_-_Start_Your_Eco_Journey!?=
+From: EcoShop <patelvishwesh0311@ecoshop.com>
+To: patel9jb@uwindsor.ca
+Date: Thu, 27 Nov 2025 10:16:53 -0000
+Message-ID: <176423861353.1676.11844173199882968553@DESKTOP-U5BUQR3>
+
+--===============5745349128017303888==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+
+    
+    
+    
+        
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+            .footer { background: #1f2937; color: #9ca3af; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }
+            .eco-tip { background: #d1fae5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        
+    
+    
+        
+            
+                🌿 Welcome to EcoShop!
+            
+            
+                Hi patel9jb! 👋
+                Thank you for joining EcoShop - your trusted marketplace for sustainable and eco-friendly products!
+                
+                Here's what you can do now:
+                
+                    🛍️ Browse our eco-friendly products
+                    🌱 Earn Eco Points with every purchase
+                    ❤️ Save favorites to your Wishlist
+                    📦 Track your orders easily
+                
+                
+                
+                    🌱 Eco Tip: Every purchase you make earns Eco Points! The higher the EcoScore of a product, the more points you earn.
+                
+                
+                
+                    Start Shopping 🛒
+                
+                
+                If you have any questions, our support team is always here to help!
+                
+                Happy Eco Shopping! 🌍
+                The EcoShop Team
+            
+            
+                © 2025 EcoShop. All rights reserved.
+                Making the world greener, one purchase at a time. 🌿
+            
+        
+    
+    
+    
+--===============5745349128017303888==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9fafb; padding: 30px; }
+            .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+            .footer { background: #1f2937; color: #9ca3af; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }
+            .eco-tip { background: #d1fae5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🌿 Welcome to EcoShop!</h1>
+            </div>
+            <div class="content">
+                <h2>Hi patel9jb! 👋</h2>
+                <p>Thank you for joining EcoShop - your trusted marketplace for sustainable and eco-friendly products!</p>
+                
+                <p>Here's what you can do now:</p>
+                <ul>
+                    <li>🛍️ Browse our eco-friendly products</li>
+                    <li>🌱 Earn Eco Points with every purchase</li>
+                    <li>❤️ Save favorites to your Wishlist</li>
+                    <li>📦 Track your orders easily</li>
+                </ul>
+                
+                <div class="eco-tip">
+                    <strong>🌱 Eco Tip:</strong> Every purchase you make earns Eco Points! The higher the EcoScore of a product, the more points you earn.
+                </div>
+                
+                <center>
+                    <a href="#" class="button">Start Shopping 🛒</a>
+                </center>
+                
+                <p>If you have any questions, our support team is always here to help!</p>
+                
+                <p>Happy Eco Shopping! 🌍</p>
+                <p><strong>The EcoShop Team</strong></p>
+            </div>
+            <div class="footer">
+                <p>© 2025 EcoShop. All rights reserved.</p>
+                <p>Making the world greener, one purchase at a time. 🌿</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    
+--===============5745349128017303888==--
+
+-------------------------------------------------------------------------------

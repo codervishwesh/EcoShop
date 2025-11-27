@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management - EcoShop{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-purple-600 to-indigo-700 py-8">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-white">👥 User Management</h1>
+                <p class="text-purple-100 mt-1">Manage all users and their roles</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="{% url 'accounts:create_staff' %}" class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition">
+                    ➕ Create Staff
+                </a>
+                <a href="{% url 'accounts:management_dashboard' %}" class="bg-purple-800 text-white px-4 py-2 rounded-lg hover:bg-purple-900 transition">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Filters -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <form method="GET" class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <input type="text" name="search" value="{{ search }}" placeholder="Username, email, name..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            </div>
+            <div class="w-40">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <select name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <option value="">All Roles</option>
+                    {% for role_value, role_label in roles %}
+                    <option value="{{ role_value }}" {% if role_filter == role_value %}selected{% endif %}>{{ role_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                🔍 Filter
+            </button>
+            <a href="{% url 'accounts:user_list' %}" class="text-gray-600 hover:text-gray-800 px-4 py-2">
+                Clear
+            </a>
+        </form>
+    </div>
+    
+    <!-- Users Table -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">User</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Role</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Joined</th>
+                    <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for user in users %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" class="w-10 h-10 rounded-full object-cover">
+                            {% else %}
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">
+                                {{ user.username|first|upper }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <p class="font-medium text-gray-800">{{ user.username }}</p>
+                                <p class="text-sm text-gray-500">{{ user.first_name }} {{ user.last_name }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">{{ user.email }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full
+                            {% if user.role == 'admin' %}bg-red-100 text-red-800
+                            {% elif user.role == 'supervisor' %}bg-blue-100 text-blue-800
+                            {% else %}bg-green-100 text-green-800{% endif %}">
+                            {{ user.get_role_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if user.is_active %}
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        {% else %}
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-gray-500 text-sm">{{ user.created_at|date:"M d, Y" }}</td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="{% url 'accounts:user_detail' user.pk %}" class="text-purple-600 hover:text-purple-800 font-medium">
+                            View Details →
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                        No users found matching your criteria.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if users.has_other_pages %}
+    <div class="mt-6 flex justify-center">
+        <nav class="flex gap-2">
+            {% if users.has_previous %}
+            <a href="?page={{ users.previous_page_number }}&role={{ role_filter }}&search={{ search }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                Previous
+            </a>
+            {% endif %}
+            
+            <span class="px-4 py-2 bg-purple-600 text-white rounded-lg">
+                Page {{ users.number }} of {{ users.paginator.num_pages }}
+            </span>
+            
+            {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}&role={{ role_filter }}&search={{ search }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                Next
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

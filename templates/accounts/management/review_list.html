@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Review Management - EcoShop{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-r from-yellow-500 to-orange-600 py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold text-white">⭐ Review Management</h1>
+    </div>
+</div>
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <form method="GET" class="flex gap-4">
+            <select name="approved" class="px-4 py-2 border rounded-lg">
+                <option value="">All Reviews</option>
+                <option value="approved" {% if approval_filter == 'approved' %}selected{% endif %}>Approved</option>
+                <option value="pending" {% if approval_filter == 'pending' %}selected{% endif %}>Hidden</option>
+            </select>
+            <button type="submit" class="bg-yellow-600 text-white px-6 py-2 rounded-lg">Filter</button>
+        </form>
+    </div>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left">Product</th>
+                    <th class="px-6 py-4 text-left">User</th>
+                    <th class="px-6 py-4 text-left">Rating</th>
+                    <th class="px-6 py-4 text-left">Comment</th>
+                    <th class="px-6 py-4 text-left">Status</th>
+                    <th class="px-6 py-4 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                {% for review in reviews %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">{{ review.product.name|truncatechars:25 }}</td>
+                    <td class="px-6 py-4">{{ review.user.username }}</td>
+                    <td class="px-6 py-4">{% for i in "12345" %}{% if forloop.counter <= review.rating %}⭐{% endif %}{% endfor %}</td>
+                    <td class="px-6 py-4 text-sm">{{ review.comment|truncatechars:50 }}</td>
+                    <td class="px-6 py-4">
+                        {% if review.is_approved %}<span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">Approved</span>
+                        {% else %}<span class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs">Hidden</span>{% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="{% url 'accounts:review_toggle_approval' review.pk %}" class="text-blue-600 mr-2">{% if review.is_approved %}Hide{% else %}Approve{% endif %}</a>
+                        {% if can_delete %}<a href="{% url 'accounts:review_delete' review.pk %}" class="text-red-600">Delete</a>{% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No reviews found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{% url 'accounts:management_dashboard' %}" class="inline-block mt-6 text-yellow-600 hover:underline">← Back to Dashboard</a>
+</div>
+{% endblock %}

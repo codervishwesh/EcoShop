@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}EcoShop - Sustainable E-Commerce Platform{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Hero Section -->
+    <div class="relative gradient-green text-white py-20 px-8 rounded-2xl mb-8 overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="relative z-10 max-w-3xl">
+            <div class="flex items-center gap-2 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span class="text-sm font-semibold tracking-wider uppercase">Sustainable Shopping Made Simple</span>
+            </div>
+            <h1 class="text-5xl font-bold mb-4">Shop Green, Live Better</h1>
+            <p class="text-xl mb-6 text-green-50">
+                Discover verified eco-friendly products from local sellers. Every purchase makes a difference.
+            </p>
+            <div class="flex gap-4">
+                <a href="{% url 'products:product_list' %}" class="bg-white text-green-700 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-all shadow-lg">
+                    Start Shopping
+                </a>
+                <a href="{% url 'core:about' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-700 transition-all">
+                    Learn More
+                </a>
+            </div>
+        </div>
+        <div class="absolute right-8 top-1/2 -translate-y-1/2 text-9xl opacity-20">
+            🌍
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="grid grid-cols-4 gap-4 mb-8">
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="bg-green-600 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-green-900">{{ total_products }}</div>
+                    <div class="text-sm text-green-700">Eco Products</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="bg-blue-600 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-blue-900">{{ total_users }}</div>
+                    <div class="text-sm text-blue-700">Happy Shoppers</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="bg-purple-600 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-purple-900">{{ total_sellers }}</div>
+                    <div class="text-sm text-purple-700">Local Sellers</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-200">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="bg-amber-600 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-amber-900">{{ avg_eco_score }}%</div>
+                    <div class="text-sm text-amber-700">Avg EcoScore</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span>Shop by Category</span>
+        </h2>
+        <div class="grid grid-cols-6 gap-4">
+            {% for category in categories %}
+            <a href="{% url 'products:category_products' category.slug %}" class="bg-white p-6 rounded-xl border-2 border-gray-200 hover:border-green-500 hover:shadow-lg transition-all cursor-pointer text-center group">
+                <div class="text-4xl mb-2">{{ category.icon }}</div>
+                <div class="font-semibold text-gray-900 group-hover:text-green-600">{{ category.name }}</div>
+                <div class="text-sm text-gray-500">{{ category.products.count }} items</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                Featured Eco Products
+            </h2>
+            <a href="{% url 'products:product_list' %}" class="text-green-600 font-semibold hover:text-green-700">
+                View All →
+            </a>
+        </div>
+        <div class="grid grid-cols-3 gap-6">
+            {% for product in featured_products %}
+            <div class="bg-white rounded-xl border-2 border-gray-200 hover:border-green-500 hover:shadow-xl transition-all overflow-hidden group">
+                <div class="relative bg-gradient-to-br from-green-50 to-emerald-50 p-8 flex items-center justify-center h-48">
+                    {% if product.image and product.image.name %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-h-full max-w-full object-contain">
+                    {% else %}
+                    <div class="text-7xl">📦</div>
+                    {% endif %}
+                    
+                    <div class="absolute top-3 left-3 px-3 py-1 rounded-full font-bold text-sm {% if product.eco_score >= 90 %}bg-green-100 text-green-600{% elif product.eco_score >= 80 %}bg-emerald-100 text-emerald-600{% else %}bg-lime-100 text-lime-600{% endif %}">
+                        <div class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            {{ product.eco_score }}
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="text-xs text-green-600 font-semibold mb-1">{{ product.category.name }}</div>
+                    <h3 class="font-bold text-gray-900 mb-2 text-lg group-hover:text-green-600">
+                        <a href="{% url 'products:product_detail' product.slug %}">{{ product.name }}</a>
+                    </h3>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="flex text-yellow-400">
+                            {% for i in "12345" %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            {% endfor %}
+                        </div>
+                        <span class="text-sm text-gray-600">
+                            {{ product.average_rating|floatformat:1 }} ({{ product.review_count }})
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="text-2xl font-bold text-green-600">${{ product.price }}</div>
+                        <form action="{% url 'orders:add_to_cart' product.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-3 text-center py-12">
+                <p class="text-gray-500">No featured products available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

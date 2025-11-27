@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - EcoShop{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-8">
+    <h1 class="text-3xl font-bold mb-6">🛒 Checkout</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Checkout Form -->
+        <div class="lg:col-span-2">
+            <form method="POST" class="bg-white rounded-xl shadow-md p-6">
+                {% csrf_token %}
+                
+                <h2 class="text-xl font-bold mb-4">📦 Shipping Information</h2>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" name="shipping_name" value="{{ form.shipping_name.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                        <input type="email" name="shipping_email" value="{{ form.shipping_email.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Phone</label>
+                        <input type="tel" name="shipping_phone" value="{{ form.shipping_phone.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Address</label>
+                        <textarea name="shipping_address" rows="2" 
+                                  class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>{{ form.shipping_address.value|default:'' }}</textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">City</label>
+                        <input type="text" name="shipping_city" value="{{ form.shipping_city.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Country</label>
+                        <input type="text" name="shipping_country" value="{{ form.shipping_country.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Postal Code</label>
+                        <input type="text" name="shipping_postal_code" value="{{ form.shipping_postal_code.value|default:'' }}" 
+                               class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required>
+                    </div>
+                </div>
+                
+                <h2 class="text-xl font-bold mb-4">💳 Payment Method</h2>
+                
+                <div class="space-y-3 mb-6">
+                    <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-500">
+                        <input type="radio" name="payment_method" value="cod" checked class="text-green-600">
+                        <span class="font-semibold">💵 Cash on Delivery</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-500">
+                        <input type="radio" name="payment_method" value="card" class="text-green-600">
+                        <span class="font-semibold">💳 Credit/Debit Card</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-green-700 transition">
+                    ✅ Place Order
+                </button>
+            </form>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-xl shadow-md p-6 sticky top-24">
+                <h2 class="text-xl font-bold mb-4">📋 Order Summary</h2>
+                
+                <!-- Cart Items -->
+                <div class="space-y-3 mb-4 max-h-64 overflow-y-auto">
+                    {% for item in cart_items %}
+                    <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                        {% if item.product.image and item.product.image.name %}
+                        <img src="{{ item.product.image.url }}" class="w-12 h-12 rounded object-cover">
+                        {% else %}
+                        <div class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">📦</div>
+                        {% endif %}
+                        <div class="flex-1">
+                            <p class="font-semibold text-sm">{{ item.product.name|truncatewords:4 }}</p>
+                            <p class="text-gray-500 text-xs">Qty: {{ item.quantity }}</p>
+                        </div>
+                        <p class="font-bold">${{ item.subtotal }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pricing -->
+                <div class="space-y-2 pt-4 border-t border-gray-200">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal</span>
+                        <span>${{ subtotal }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Tax (13%)</span>
+                        <span>${{ tax|floatformat:2 }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Shipping</span>
+                        <span>{% if shipping == 0 %}FREE{% else %}${{ shipping }}{% endif %}</span>
+                    </div>
+                    <div class="flex justify-between text-green-600">
+                        <span>🌱 Eco Points</span>
+                        <span>+{{ eco_points }}</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="flex justify-between text-xl font-bold">
+                        <span>Total</span>
+                        <span>${{ total|floatformat:2 }}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-green-50 rounded-lg text-center">
+                    <p class="text-green-700 text-sm">🌿 Free shipping on orders over $50!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+```
+
+---
+
+## 📁 Create this file at:
+```
+templates/orders/checkout.html

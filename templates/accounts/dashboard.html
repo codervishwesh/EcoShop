@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - EcoShop{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-8">
+    <!-- User Profile Header -->
+    <div class="gradient-green text-white p-8 rounded-xl mb-6">
+        <div class="flex items-center gap-6">
+            <div class="bg-white text-green-600 w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold">
+                {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-full h-full rounded-full object-cover">
+                {% else %}
+                {{ user.username|first|upper }}
+                {% endif %}
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold mb-2">{{ user.get_full_name|default:user.username }}</h1>
+                <p class="text-green-100 mb-3">Member since {{ user.created_at|date:"F Y" }}</p>
+                <div class="flex gap-4">
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <div class="text-2xl font-bold">{{ user.eco_points }}</div>
+                        <div class="text-sm">Eco Points</div>
+                    </div>
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <div class="text-2xl font-bold">{{ user.total_orders }}</div>
+                        <div class="text-sm">Orders</div>
+                    </div>
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <div class="text-2xl font-bold">{{ user.co2_saved }}kg</div>
+                        <div class="text-sm">CO₂ Saved</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <a href="{% url 'accounts:profile' %}" class="bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition-all text-center">
+                    Edit Profile
+                </a>
+                <a href="{% url 'accounts:history' %}" class="bg-green-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-800 transition-all text-center">
+                    Activity History
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="border-2 border-white text-white px-6 py-2 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-all text-center">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <a href="{% url 'products:product_list' %}" class="bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-green-500 transition-all text-center">
+            <div class="text-3xl mb-2">🛍️</div>
+            <div class="font-semibold text-gray-900">Shop Products</div>
+        </a>
+        <a href="{% url 'orders:order_history' %}" class="bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-green-500 transition-all text-center">
+            <div class="text-3xl mb-2">📦</div>
+            <div class="font-semibold text-gray-900">My Orders</div>
+        </a>
+        <a href="{% url 'products:wishlist' %}" class="bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-green-500 transition-all text-center">
+            <div class="text-3xl mb-2">❤️</div>
+            <div class="font-semibold text-gray-900">Wishlist</div>
+        </a>
+        <a href="{% url 'orders:cart' %}" class="bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-green-500 transition-all text-center">
+            <div class="text-3xl mb-2">🛒</div>
+            <div class="font-semibold text-gray-900">Shopping Cart</div>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6 mb-6">
+        <!-- Environmental Impact -->
+        <div class="bg-white p-6 rounded-xl border-2 border-gray-200">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                Your Environmental Impact
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span class="text-gray-600">🌳 Trees Planted</span>
+                    <span class="font-bold text-green-600">{{ trees_planted }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="text-gray-600">♻️ Plastic Avoided</span>
+                    <span class="font-bold text-blue-600">{{ plastic_avoided }}g</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-cyan-50 rounded-lg">
+                    <span class="text-gray-600">💧 Water Saved</span>
+                    <span class="font-bold text-cyan-600">{{ water_saved }}L</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-emerald-50 rounded-lg">
+                    <span class="text-gray-600">💰 Total Spent</span>
+                    <span class="font-bold text-emerald-600">${{ total_spent|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="bg-white p-6 rounded-xl border-2 border-gray-200">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+                Achievements
+            </h3>
+            <div class="grid grid-cols-3 gap-3">
+                {% if user.total_orders >= 1 %}
+                <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                    <div class="text-4xl mb-1">🌟</div>
+                    <div class="text-xs font-semibold">First Order</div>
+                </div>
+                {% endif %}
+                
+                {% if user.eco_points >= 100 %}
+                <div class="text-center p-3 bg-green-50 rounded-lg">
+                    <div class="text-4xl mb-1">🌱</div>
+                    <div class="text-xs font-semibold">Eco Pioneer</div>
+                </div>
+                {% endif %}
+                
+                {% if user.total_orders >= 5 %}
+                <div class="text-center p-3 bg-blue-50 rounded-lg">
+                    <div class="text-4xl mb-1">💚</div>
+                    <div class="text-xs font-semibold">Eco Warrior</div>
+                </div>
+                {% endif %}
+                
+                {% if user.total_orders >= 10 %}
+                <div class="text-center p-3 bg-purple-50 rounded-lg">
+                    <div class="text-4xl mb-1">🏆</div>
+                    <div class="text-xs font-semibold">Champion</div>
+                </div>
+                {% else %}
+                <div class="text-center p-3 bg-gray-50 rounded-lg opacity-40">
+                    <div class="text-4xl mb-1">🔒</div>
+                    <div class="text-xs font-semibold">Locked</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="bg-white p-6 rounded-xl border-2 border-gray-200">
+        <h3 class="font-bold text-lg mb-4">Recent Orders</h3>
+        {% if recent_orders %}
+        <div class="space-y-3">
+            {% for order in recent_orders %}
+            <a href="{% url 'orders:order_detail' order.order_number %}" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all">
+                <div>
+                    <div class="font-semibold text-gray-900">Order #{{ order.order_number }}</div>
+                    <div class="text-sm text-gray-600">{{ order.created_at|date:"M d, Y" }}</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold text-green-600">${{ order.total }}</div>
+                    <div class="text-sm {% if order.status == 'delivered' %}text-green-600{% elif order.status == 'cancelled' %}text-red-600{% else %}text-blue-600{% endif %}">
+                        {{ order.get_status_display }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <a href="{% url 'orders:order_history' %}" class="block text-center mt-4 text-green-600 font-semibold hover:text-green-700">
+            View All Orders →
+        </a>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">No orders yet. Start shopping!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

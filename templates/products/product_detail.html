@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - EcoShop{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Product Image -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 flex items-center justify-center min-h-96">
+            {% if product.image and product.image.name %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-h-full max-w-full object-contain">
+            {% else %}
+            <div class="text-9xl">📦</div>
+            {% endif %}
+        </div>
+        
+        <!-- Product Info -->
+        <div>
+            <!-- Category & EcoScore -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="{% url 'products:category_products' product.category.slug %}" 
+                   class="text-green-600 font-semibold hover:underline">
+                    {{ product.category.name }}
+                </a>
+                <span class="px-3 py-1 rounded-full font-bold text-sm bg-green-100 text-green-600">
+                    🌿 EcoScore: {{ product.eco_score }}
+                </span>
+            </div>
+            
+            <!-- Title -->
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ product.name }}</h1>
+            
+            <!-- Rating -->
+            <div class="flex items-center gap-2 mb-4">
+                <div class="flex text-yellow-400">
+                    {% for i in "12345" %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    {% endfor %}
+                </div>
+                <span class="text-gray-600">{{ product.average_rating|floatformat:1 }} ({{ product.review_count }} reviews)</span>
+            </div>
+            
+            <!-- Price -->
+            <div class="text-4xl font-bold text-green-600 mb-6">${{ product.price }}</div>
+            
+            <!-- Stock Status -->
+            <div class="mb-6">
+                {% if product.stock > 10 %}
+                <span class="text-green-600 font-semibold">✓ In Stock ({{ product.stock }} available)</span>
+                {% elif product.stock > 0 %}
+                <span class="text-orange-600 font-semibold">⚠ Low Stock (Only {{ product.stock }} left!)</span>
+                {% else %}
+                <span class="text-red-600 font-semibold">✕ Out of Stock</span>
+                {% endif %}
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-6">
+                <h3 class="font-bold text-gray-800 mb-2">Description</h3>
+                <p class="text-gray-600 leading-relaxed">{{ product.description }}</p>
+            </div>
+            
+            <!-- Add to Cart & Wishlist -->
+            <div class="flex gap-4 mb-6">
+                {% if product.stock > 0 %}
+                <form action="{% url 'orders:add_to_cart' product.id %}" method="post" class="flex-1 flex gap-2">
+                    {% csrf_token %}
+                    <select name="quantity" class="px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none">
+                        {% for i in "123456789" %}
+                        {% if forloop.counter <= product.stock %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-bold hover:bg-green-700 transition">
+                        🛒 Add to Cart
+                    </button>
+                </form>
+                {% else %}
+                <button disabled class="flex-1 bg-gray-300 text-gray-500 py-3 px-6 rounded-lg font-bold cursor-not-allowed">
+                    Out of Stock
+                </button>
+                {% endif %}
+                
+                <!-- Wishlist Button -->
+                {% if user.is_authenticated %}
+                    {% if in_wishlist %}
+                    <a href="{% url 'products:remove_from_wishlist' product.id %}" 
+                       class="px-4 py-3 bg-red-100 text-red-600 rounded-lg font-bold hover:bg-red-200 transition flex items-center gap-2">
+                        ❤️ Remove
+                    </a>
+                    {% else %}
+                    <a href="{% url 'products:add_to_wishlist' product.id %}" 
+                       class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg font-bold hover:bg-gray-200 transition flex items-center gap-2">
+                        🤍 Wishlist
+                    </a>
+                    {% endif %}
+                {% else %}
+                <a href="{% url 'accounts:login' %}" 
+                   class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg font-bold hover:bg-gray-200 transition flex items-center gap-2">
+                    🤍 Wishlist
+                </a>
+                {% endif %}
+            </div>
+            
+            <!-- Eco Benefits -->
+            <div class="bg-green-50 rounded-xl p-4">
+                <h3 class="font-bold text-green-800 mb-2">🌱 Eco Benefits</h3>
+                <ul class="text-green-700 text-sm space-y-1">
+                    <li>✓ Earn {{ product.eco_score }} Eco Points with this purchase</li>
+                    <li>✓ Sustainable materials used</li>
+                    <li>✓ Eco-friendly packaging</li>
+                    <li>✓ Carbon-neutral shipping available</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reviews Section -->
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-6">⭐ Customer Reviews</h2>
+        
+        {% if product.reviews.exists %}
+        <div class="space-y-4 mb-8">
+            {% for review in product.reviews.all %}
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <p class="font-bold text-gray-800">{{ review.user.username }}</p>
+                        <div class="flex text-yellow-400">
+                            {% for i in "12345" %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 {% if forloop.counter <= review.rating %}fill-current{% else %}text-gray-300{% endif %}" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <span class="text-sm text-gray-500">{{ review.created_at|date:"M d, Y" }}</span>
+                </div>
+                <p class="text-gray-600">{{ review.comment }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-gray-50 rounded-xl p-8 text-center mb-8">
+            <p class="text-gray-500">No reviews yet. Be the first to review this product!</p>
+        </div>
+        {% endif %}
+        
+        <!-- Add Review Form -->
+        {% if user.is_authenticated %}
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h3 class="font-bold text-lg mb-4">✍️ Write a Review</h3>
+            <form method="POST" action="{% url 'products:add_review' product.id %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Rating</label>
+                    <select name="rating" class="px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none">
+                        <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
+                        <option value="4">⭐⭐⭐⭐ (4 - Good)</option>
+                        <option value="3">⭐⭐⭐ (3 - Average)</option>
+                        <option value="2">⭐⭐ (2 - Poor)</option>
+                        <option value="1">⭐ (1 - Bad)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Your Review</label>
+                    <textarea name="comment" rows="4" placeholder="Share your experience with this product..." 
+                              class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none" required></textarea>
+                </div>
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="bg-gray-50 rounded-xl p-6 text-center">
+            <p class="text-gray-600 mb-3">Please log in to write a review</p>
+            <a href="{% url 'accounts:login' %}" class="text-green-600 font-semibold hover:underline">Login here</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+```
+
+---
+
+## 📁 Create this file at:
+```
+templates/products/product_detail.html

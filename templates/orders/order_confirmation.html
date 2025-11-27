@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed - EcoShop{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-12">
+    <!-- Success Message -->
+    <div class="text-center mb-8">
+        <div class="text-8xl mb-4">🎉</div>
+        <h1 class="text-3xl font-bold text-green-600 mb-2">Order Placed Successfully!</h1>
+        <p class="text-gray-600">Thank you for shopping eco-friendly!</p>
+    </div>
+    
+    <!-- Order Details Card -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+            <div>
+                <p class="text-sm text-gray-500">Order Number</p>
+                <p class="text-2xl font-bold text-gray-800">{{ order.order_number }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-500">Order Date</p>
+                <p class="font-semibold">{{ order.created_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+        
+        <!-- Order Items -->
+        <h3 class="font-bold text-lg mb-4">📦 Order Items</h3>
+        <div class="space-y-3 mb-6">
+            {% for item in order_items %}
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gray-100 rounded flex items-center justify-center">📦</div>
+                    <div>
+                        <p class="font-semibold">{{ item.product_name }}</p>
+                        <p class="text-sm text-gray-500">Qty: {{ item.quantity }} × ${{ item.product_price }}</p>
+                    </div>
+                </div>
+                <p class="font-bold">${{ item.subtotal }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pricing Summary -->
+        <div class="bg-gray-50 rounded-lg p-4 space-y-2">
+            <div class="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>${{ order.subtotal }}</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+                <span>Tax</span>
+                <span>${{ order.tax }}</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+                <span>Shipping</span>
+                <span>{% if order.shipping_cost == 0 %}FREE{% else %}${{ order.shipping_cost }}{% endif %}</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between text-xl font-bold">
+                <span>Total</span>
+                <span class="text-green-600">${{ order.total }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Eco Impact -->
+    <div class="bg-green-50 rounded-xl p-6 mb-6 text-center">
+        <h3 class="font-bold text-lg text-green-800 mb-3">🌱 Your Eco Impact</h3>
+        <div class="flex justify-center gap-8">
+            <div>
+                <p class="text-3xl font-bold text-green-600">+{{ order.eco_points_earned }}</p>
+                <p class="text-sm text-green-700">Eco Points Earned</p>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-green-600">{{ order.co2_saved }}kg</p>
+                <p class="text-sm text-green-700">CO₂ Saved</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Shipping Info -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <h3 class="font-bold text-lg mb-4">🚚 Shipping Details</h3>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+                <p class="text-gray-500">Name</p>
+                <p class="font-semibold">{{ order.shipping_name }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Email</p>
+                <p class="font-semibold">{{ order.shipping_email }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Phone</p>
+                <p class="font-semibold">{{ order.shipping_phone }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500">Status</p>
+                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">{{ order.get_status_display }}</span>
+            </div>
+            <div class="col-span-2">
+                <p class="text-gray-500">Address</p>
+                <p class="font-semibold">{{ order.shipping_address }}, {{ order.shipping_city }}, {{ order.shipping_country }} {{ order.shipping_postal_code }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-4 justify-center">
+        <a href="{% url 'orders:order_history' %}" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+            📦 View Order History
+        </a>
+        <a href="{% url 'products:product_list' %}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+            🛍️ Continue Shopping
+        </a>
+    </div>
+</div>
+{% endblock %}

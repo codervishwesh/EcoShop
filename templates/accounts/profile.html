@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Profile - EcoShop{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-6 py-8">
+    <h1 class="text-3xl font-bold mb-6">Edit Profile</h1>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label class="block font-semibold mb-2">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700">Save Changes</button>
+    </form>
+</div>
+{% endblock %}
